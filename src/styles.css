@@ -210,10 +210,10 @@ textarea.neu-input { resize: vertical; min-height: 70px; }
 
 /* ===================== Page + transitions ===================== */
 .page { padding: 1.5rem 2rem 3rem; max-width: 1280px; margin: 0 auto; position: relative; }
-.curtain {
-  position: fixed; inset: 0; z-index: 60; transform-origin: top; pointer-events: none;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.85), rgba(14, 165, 233, 0.85));
-  backdrop-filter: blur(6px);
+.route-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 70; transform-origin: left; pointer-events: none;
+  background: linear-gradient(90deg, var(--c-primary), var(--c-primary-2), #8b5cf6);
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.6);
 }
 .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .page-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }

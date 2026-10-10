@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useAuth } from './auth';
 import Loader from './components/Loader';
+import RouteProgress from './components/RouteProgress';
 import Layout from './components/Layout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
@@ -28,7 +29,7 @@ export default function App() {
 
   useEffect(() => {
     document.getElementById('boot-loader')?.remove();
-    const t = setTimeout(() => setSplash(false), 1400);
+    const t = setTimeout(() => setSplash(false), 1100);
     return () => clearTimeout(t);
   }, []);
 
@@ -40,7 +41,8 @@ export default function App() {
         <span className="blob b1" /><span className="blob b2" /><span className="blob b3" /><span className="blob b4" />
       </div>
       <AnimatePresence>{(splash || loading) && <Loader key="splash" full />}</AnimatePresence>
-      {inApp ? (
+      <RouteProgress routeKey={location.pathname} />
+      {splash || loading ? null : inApp ? (
         <Private>
           <Layout>
             <AnimatePresence mode="wait">
