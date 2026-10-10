@@ -23,8 +23,9 @@ export default function Login() {
   async function submit(e) {
     e.preventDefault();
     setBusy(true); setError('');
-    const fn = mode === 'login' ? supabase.auth.signInWithPassword : supabase.auth.signUp;
-    const { data, error } = await fn.call(supabase.auth, { email, password });
+    const { data, error } = mode === 'login'
+      ? await supabase.auth.signInWithPassword({ email, password })
+      : await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + '/login' } });
     setBusy(false);
     if (error) return setError(error.message);
     if (mode === 'signup' && !data.session) {
