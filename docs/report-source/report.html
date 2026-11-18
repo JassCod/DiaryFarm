@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DairyFarm – Project Report</title>
+<style>
+@font-face { font-family: 'Source Serif'; src: url(fonts/ss-400.woff2); font-weight: 400; }
+@font-face { font-family: 'Source Serif'; src: url(fonts/ss-400i.woff2); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'Source Serif'; src: url(fonts/ss-600.woff2); font-weight: 600; }
+@font-face { font-family: 'Source Serif'; src: url(fonts/ss-700.woff2); font-weight: 700; }
+@font-face { font-family: 'Fraunces'; src: url(fonts/fr-600.woff2); font-weight: 600; }
+@font-face { font-family: 'Fraunces'; src: url(fonts/fr-700.woff2); font-weight: 700; }
+
+:root {
+  --ink: #1d2a28;
+  --soft: #4b5a57;
+  --green: #1f5f4a;
+  --green-2: #2f7d63;
+  --cream: #f6f1e6;
+  --rule: #c9bfa8;
+  --gold: #b4873a;
+}
+@page { size: A4; margin: 24mm 22mm 22mm 24mm;
+  @bottom-center { content: counter(page); font: 9.5pt 'Source Serif', serif; color: #6b6f68; }
+  @top-right { content: "DairyFarm · Project Report"; font: italic 8.5pt 'Source Serif', serif; color: #8a8a80; }
+}
+@page cover { margin: 0; @bottom-center { content: none; } @top-right { content: none; } }
+@page front { @top-right { content: none; } }
+
+* { box-sizing: border-box; }
+html { font-family: 'Source Serif', Georgia, serif; font-size: 11.2pt; line-height: 1.58; color: var(--ink); }
+body { margin: 0; }
+p { margin: 0 0 0.62em; text-align: justify; hyphens: auto; }
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; color: var(--green); font-weight: 600; line-height: 1.2; break-after: avoid; }
+h2 { font-size: 14.5pt; margin: 1.4em 0 0.45em; }
+h3 { font-size: 12pt; margin: 1.1em 0 0.35em; color: var(--ink); }
+ul, ol { margin: 0 0 0.7em; padding-left: 1.3em; }
+li { margin-bottom: 0.22em; }
+strong { font-weight: 600; }
+code { font-family: 'JetBrains Mono', monospace; font-size: 8.8pt; background: #f1ede2; padding: 0 3px; border-radius: 2px; }
+pre { font-family: 'JetBrains Mono', monospace; font-size: 8.4pt; line-height: 1.45; background: #f7f4ec; border-left: 3px solid var(--green-2); padding: 9px 12px; margin: 0.4em 0 1em; white-space: pre-wrap; break-inside: avoid; }
+.page-break { break-before: page; }
+
+/* cover */
+.cover { page: cover; height: 297mm; width: 210mm; position: relative; background: var(--cream); overflow: hidden; }
+.cover .band { position: absolute; left: 0; top: 0; bottom: 0; width: 22mm; background: var(--green); }
+.cover .band::after { content: ''; position: absolute; right: -4mm; top: 0; bottom: 0; width: 1.2mm; background: var(--gold); }
+.cover .inner { position: absolute; left: 40mm; right: 20mm; top: 26mm; bottom: 22mm; display: flex; flex-direction: column; }
+.cover .kicker { font: 600 9.5pt 'Source Serif'; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
+.cover h1 { font-size: 40pt; margin: 6mm 0 3mm; color: var(--green); letter-spacing: -0.01em; }
+.cover .sub { font-size: 14pt; color: var(--soft); font-style: italic; max-width: 125mm; line-height: 1.4; }
+.cover .art { margin: 12mm 0 0; }
+.cover .meta { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6mm 10mm; font-size: 10.5pt; }
+.cover .meta h4 { font: 600 8.5pt 'Source Serif'; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin: 0 0 1.5mm; }
+.cover .meta .name { font: 600 13pt 'Fraunces'; color: var(--ink); }
+.cover .meta .line { border-bottom: 0.6pt solid #a69d88; height: 6mm; width: 70mm; }
+.cover .college { margin-top: 10mm; padding-top: 5mm; border-top: 0.6pt solid var(--rule); font-size: 10.5pt; color: var(--soft); display: flex; justify-content: space-between; }
+
+/* front matter */
+.front { page: front; }
+.front-title { font-family: 'Fraunces'; font-size: 20pt; color: var(--green); text-align: center; margin: 8mm 0 9mm; }
+.sign { display: flex; justify-content: space-between; margin-top: 22mm; font-size: 10.5pt; }
+.sign div { width: 62mm; border-top: 0.6pt solid #888; padding-top: 2mm; text-align: center; }
+.fill { display: inline-block; min-width: 45mm; border-bottom: 0.6pt solid #999; }
+
+.toc { list-style: none; padding: 0; margin: 0; }
+.toc li { display: flex; align-items: baseline; margin: 0 0 2.4mm; }
+.toc li.ch { font-family: 'Fraunces'; font-weight: 600; color: var(--green); margin-top: 4.5mm; font-size: 11.5pt; }
+.toc li.sub { padding-left: 8mm; font-size: 10.4pt; color: var(--soft); }
+.toc .dots { flex: 1; border-bottom: 0.8pt dotted #b8b0a0; margin: 0 2mm; transform: translateY(-3px); }
+
+/* chapters */
+.chapter { break-before: page; }
+.ch-head { display: flex; align-items: flex-end; gap: 6mm; border-bottom: 0.8pt solid var(--rule); padding-bottom: 4mm; margin-bottom: 7mm; }
+.ch-num { font: 700 44pt/0.9 'Fraunces'; color: var(--gold); }
+.ch-head h1 { font-size: 22pt; margin: 0; }
+.ch-head small { display: block; font: 600 8.5pt 'Source Serif'; letter-spacing: 0.2em; text-transform: uppercase; color: var(--soft); margin-bottom: 1mm; }
+
+figure { margin: 4mm 0 6mm; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; max-height: 105mm; border: 0.6pt solid #d6cfbf; border-radius: 3px; }
+figure svg { max-width: 100%; height: auto; }
+figcaption { font-size: 9.6pt; color: var(--soft); font-style: italic; margin-top: 2mm; }
+figcaption b { font-style: normal; color: var(--ink); }
+.fig-pair { display: grid; grid-template-columns: 1.85fr 1fr; gap: 6mm; align-items: start; }
+
+table { border-collapse: collapse; width: 100%; font-size: 9.5pt; margin: 0 0 6mm; break-inside: auto; }
+th { font-weight: 600; text-align: left; background: #ece6d6; border-bottom: 0.8pt solid #a69d88; padding: 4px 6px; }
+td { border-bottom: 0.5pt solid #ddd5c3; padding: 3.5px 6px; vertical-align: top; }
+tr { break-inside: avoid; }
+.tcap { font-size: 9.6pt; color: var(--soft); font-style: italic; text-align: center; margin: 4mm 0 1.5mm; break-after: avoid; }
+.tcap b { font-style: normal; color: var(--ink); }
+td.ok { color: var(--green); font-weight: 600; }
+.note { background: #f3efe3; border-left: 3px solid var(--gold); padding: 3mm 4mm; margin: 3mm 0 5mm; font-size: 10.3pt; break-inside: avoid; }
+.two-col { columns: 2; column-gap: 8mm; }
+.two-col li { break-inside: avoid; }
+.refs li { margin-bottom: 2mm; font-size: 10.2pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="cover">
+  <div class="band"></div>
+  <div class="inner">
+    <div class="kicker">Major Project Report · Session 2026–27</div>
+    <h1>DairyFarm</h1>
+    <div class="sub">A web-based herd, milk and breeding record management system for cow and buffalo dairy farms</div>
+
+    <div class="art">
+      <svg width="500" height="250" viewBox="0 0 420 210" fill="none" stroke="#1f5f4a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <!-- ground -->
+        <path d="M10 186 H410" stroke="#b4873a"/>
+        <path d="M30 192 H120 M150 192 H260 M290 192 H380" stroke="#c9bfa8"/>
+        <!-- barn -->
+        <path d="M24 186 V108 L74 70 L124 108 V186"/>
+        <path d="M24 108 H124"/>
+        <path d="M54 186 V136 H94 V186"/>
+        <path d="M54 136 L94 186 M94 136 L54 186" stroke="#b4873a"/>
+        <path d="M66 98 h16 v14 h-16z"/>
+        <!-- cow -->
+        <path d="M172 122 h82 c10 0 16 6 16 16 v18 c0 8 -6 12 -14 12 h-84 c-8 0 -14 -4 -14 -12 v-20 c0 -8 6 -14 14 -14z" fill="#fffdf7"/>
+        <path d="M188 124 c6 8 4 18 -6 22 c-6 -2 -10 -8 -10 -14" fill="#1f5f4a" stroke="none" opacity=".85"/>
+        <path d="M226 126 c10 -2 18 6 14 14 c-4 6 -14 6 -18 0 c-2 -6 0 -12 4 -14z" fill="#1f5f4a" stroke="none" opacity=".85"/>
+        <path d="M268 132 l10 -10 h18 c6 0 10 4 10 10 v12 c0 8 -6 12 -12 12 h-10 c-8 0 -14 -6 -16 -12z" fill="#fffdf7"/>
+        <path d="M282 122 c-2 -6 -6 -9 -10 -10 M300 122 c2 -6 6 -9 10 -10" stroke="#b4873a"/>
+        <path d="M278 126 l-8 -2 M304 126 l8 -2"/>
+        <circle cx="285" cy="134" r="1.6" fill="#1f5f4a"/><circle cx="297" cy="134" r="1.6" fill="#1f5f4a"/>
+        <path d="M286 148 h8"/>
+        <path d="M180 168 v18 M196 168 v18 M240 168 v18 M256 168 v18" stroke-width="2.2"/>
+        <path d="M158 130 c-8 8 -10 22 -6 34 l-3 6"/>
+        <path d="M214 168 c0 6 4 9 8 9 s8 -3 8 -9" fill="#f1c9b8"/>
+        <!-- milk can -->
+        <path d="M338 186 v-46 c0 -6 4 -10 10 -10 h14 c6 0 10 4 10 10 v46 z"/>
+        <path d="M344 130 v-10 h22 v10"/>
+        <path d="M338 154 h34" stroke="#b4873a"/>
+        <!-- sun -->
+        <circle cx="376" cy="44" r="16" stroke="#b4873a"/>
+        <path d="M376 16 v-8 M376 80 v-8 M348 44 h-8 M412 44 h-8 M356 24 l-6 -6 M402 70 l-6 -6 M396 24 l6 -6 M350 70 l6 -6" stroke="#b4873a"/>
+      </svg>
+    </div>
+
+    <div class="meta">
+      <div>
+        <h4>Submitted by</h4>
+        <div class="name">Jaspreet Singh</div>
+        <div>Roll No. <span class="fill"></span></div>
+        <div class="name" style="margin-top:3mm">Gursajan Singh</div>
+        <div>Roll No. <span class="fill"></span></div>
+      </div>
+      <div>
+        <h4>Submitted to</h4>
+        <div class="line"></div>
+        <div style="font-size:9.5pt;color:#6b6f68">Project Guide</div>
+        <div class="line" style="margin-top:4mm"></div>
+        <div style="font-size:9.5pt;color:#6b6f68">Department</div>
+      </div>
+    </div>
+    <div class="college">
+      <span>Name of College / Institute: <span class="fill" style="min-width:70mm"></span></span>
+      <span>November 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DECLARATION ============ -->
+<section class="front page-break">
+  <div class="front-title">Declaration</div>
+  <p>We, <strong>Jaspreet Singh</strong> and <strong>Gursajan Singh</strong>, hereby declare that the project report entitled <em>“DairyFarm: A Web-Based Herd, Milk and Breeding Record Management System for Dairy Farms”</em> is a record of the project work carried out by us under the guidance of <span class="fill"></span>. The work presented here has not been submitted elsewhere for the award of any other degree or diploma.</p>
+  <p>The software described in this report is working and is hosted online. All screenshots in this report were taken from the running application using sample data that we entered for demonstration.</p>
+  <div class="sign">
+    <div>Jaspreet Singh<br><small>Roll No. ____________</small></div>
+    <div>Gursajan Singh<br><small>Roll No. ____________</small></div>
+  </div>
+  <p style="margin-top:12mm">Place: ____________________ &nbsp;&nbsp;&nbsp; Date: ____________________</p>
+
+  <div class="front-title" style="margin-top:22mm">Acknowledgement</div>
+  <p>We would like to thank our project guide, <span class="fill"></span>, for the time and advice given to us throughout this project. We are also thankful to the Head of the Department and the faculty members who reviewed our progress and pointed out things we had missed.</p>
+  <p>We also found the guidance published by NDDB, ICAR and GADVASU on dairy farm management very useful while deciding what records the system should keep.</p>
+  <p>Finally, we thank our families and friends for their support.</p>
+  <p style="text-align:right;margin-top:8mm"><em>Jaspreet Singh<br>Gursajan Singh</em></p>
+</section>
+
+<!-- ============ ABSTRACT ============ -->
+<section class="front page-break">
+  <div class="front-title">Abstract</div>
+  <p>Small and medium dairy farms in Punjab and the rest of India still keep most of their records on paper: a milk register near the shed, a diary for the vet's visits and, if anyone remembers, a note of the date a cow or buffalo was inseminated. These records get lost, are hard to search and almost never get added up. As a result farmers miss pregnancy checks, dry off animals late, sell milk during a medicine withdrawal period, or simply do not know which animal is giving how much milk.</p>
+  <p><strong>DairyFarm</strong> is a web application that replaces these registers. Every animal is registered with its ear-tag number, species, breed, age, mother and lactation number. Morning and evening milk is recorded daily for each animal on a single screen. Treatments, diseases, medicines, vaccinations and deworming are kept as a history for each animal. Heat, insemination, pregnancy diagnosis and calving are recorded, and the system calculates the dates that matter next: the 21-day heat check, the pregnancy check at 60 days, the dry-off date and the expected calving date (283 days for cows and 310 days for buffaloes). A dashboard shows today's milk, trends and a list of reminders, and reports can be exported to Excel.</p>
+  <p>The front end is built with React and Vite, and the data is stored in a PostgreSQL database hosted on Supabase, which also handles login. Row-level security makes sure each farm account can only see its own data. The application is deployed on Vercel and works on both computers and mobile phones. For the interface we used a glassmorphism style with neumorphic inputs and claymorphic cards, along with page transitions and loading animations, to make an everyday tool pleasant to use.</p>
+  <p><strong>Keywords:</strong> dairy farm management, herd records, milk recording, breeding management, React, Supabase, PostgreSQL, web application.</p>
+</section>
+
+<!-- ============ CONTENTS ============ -->
+<section class="front page-break">
+  <div class="front-title">Contents</div>
+  <ul class="toc">
+    <li class="ch">1&nbsp;&nbsp;Introduction<span class="dots"></span>5</li>
+    <li class="ch">2&nbsp;&nbsp;Study of Dairy Farm Record Keeping<span class="dots"></span>7</li>
+    <li class="ch">3&nbsp;&nbsp;System Analysis<span class="dots"></span>9</li>
+    <li class="ch">4&nbsp;&nbsp;Requirement Specification<span class="dots"></span>11</li>
+    <li class="ch">5&nbsp;&nbsp;System Design<span class="dots"></span>13</li>
+    <li class="sub">5.1 Architecture · 5.2 Data flow · 5.3 Database design · 5.4 Modules · 5.5 Interface design<span class="dots"></span></li>
+    <li class="ch">6&nbsp;&nbsp;Implementation<span class="dots"></span>16</li>
+    <li class="ch">7&nbsp;&nbsp;Screenshots of the Application<span class="dots"></span>19</li>
+    <li class="ch">8&nbsp;&nbsp;Testing<span class="dots"></span>26</li>
+    <li class="ch">9&nbsp;&nbsp;Limitations and Future Scope<span class="dots"></span>28</li>
+    <li class="ch">10&nbsp;&nbsp;Conclusion<span class="dots"></span>29</li>
+    <li class="ch">References<span class="dots"></span>30</li>
+  </ul>
+</section>
+
+<!-- ============ 1 INTRODUCTION ============ -->
+<section class="chapter" data-ch="1">
+  <div class="ch-head"><span class="ch-num">1</span><div><small>Chapter One</small><h1>Introduction</h1></div></div>
+
+  <h2>1.1 Background</h2>
+  <p>India is the largest milk producer in the world, and a large part of that milk comes from small farms with anywhere between five and fifty animals. In Punjab most of these farms keep a mix of buffaloes (mainly Murrah and Nili-Ravi) and cows (Holstein Friesian crossbreds, Jersey and desi breeds like Sahiwal). The money a farm makes depends directly on how well each animal is managed: how much milk she gives, whether she gets pregnant on time, and whether illnesses are caught early.</p>
+  <p>All of this depends on records. A farmer needs to know when a buffalo was inseminated to know when to check her for pregnancy; needs to know her milk yield to decide whether to keep her; and needs to remember that she was given an antibiotic so that her milk is not sold for the next few days. On a typical small farm this information is spread over a milk register, a few loose pages and the farmer's memory.</p>
+
+  <h2>1.2 Problem statement</h2>
+  <p>Paper-based records on a dairy farm have some clear problems:</p>
+  <ul>
+    <li>Records are lost or damaged in the shed, and old registers are thrown away.</li>
+    <li>It is difficult to find the history of a single animal, for example all treatments given to tag no. 104 in the last year.</li>
+    <li>Nobody calculates future dates. Pregnancy checks, dry-off and expected calving are worked out in the head, if at all.</li>
+    <li>Totals and averages (milk per animal per day, cost of treatment per month) are almost never calculated.</li>
+    <li>When the owner is away, the person managing the farm has no access to the records.</li>
+  </ul>
+
+  <h2>1.3 Objectives</h2>
+  <ol>
+    <li>To build a register of all animals on the farm identified by their tag number, including calves and their mothers.</li>
+    <li>To record morning and evening milk for every animal every day, quickly enough that it is actually done.</li>
+    <li>To keep a complete health history: disease, symptoms, medicine, dose, reason, vet, cost and milk-withdrawal date.</li>
+    <li>To record heat, insemination and pregnancy, and to calculate the next important dates automatically.</li>
+    <li>To show reminders for everything that is due, so that nothing is missed.</li>
+    <li>To keep the data online, safe and behind a login, and make it usable on a mobile phone.</li>
+  </ol>
+
+  <h2>1.4 Scope of the project</h2>
+  <p>The system is meant for a single farm owner or manager who logs in and maintains the records of their own herd. It covers cows and buffaloes, both male and female, from birth (or purchase) to sale or death. It does not handle accounting, milk sales to the dairy cooperative or feed stock in this version; these are discussed in Chapter 9 as future work.</p>
+</section>
+
+<!-- ============ 2 STUDY ============ -->
+<section class="chapter" data-ch="2">
+  <div class="ch-head"><span class="ch-num">2</span><div><small>Chapter Two</small><h1>Study of Dairy Farm Record Keeping</h1></div></div>
+  <p>Before writing any code we spent time understanding what a dairy farmer actually needs to track. We looked at the record formats suggested by the National Dairy Development Board (NDDB) and state animal husbandry departments, and read about the reproductive cycle of cattle and buffaloes and the common diseases on Indian farms. This chapter summarises what we learned, since the design of the database and the reminders follows directly from it.</p>
+
+  <h2>2.1 Identification of animals</h2>
+  <p>Every animal on an organised farm carries an ear tag with a number. Under the government's INAPH / Bharat Pashudhan programme, animals are given a 12-digit tag, while many farms also use their own short numbers. In our system the tag number is the main way an animal is identified, and it must be unique within a farm.</p>
+
+  <h2>2.2 Milk recording</h2>
+  <p>Animals are milked twice a day, in the morning and the evening, and the two yields are usually different (the morning milking is often slightly higher). Milk is sold on the basis of fat and SNF (solids-not-fat). Buffalo milk typically has 6–8% fat and cow milk 3.5–5%, so recording fat and SNF along with the quantity helps the farmer compare animals and check the dairy's payment slips.</p>
+
+  <h2>2.3 Reproduction cycle</h2>
+  <p>A cow or buffalo comes into heat roughly every 21 days. If she is inseminated (artificial insemination by a technician, or natural service by a bull) and does not come back into heat after 21 days, she may be pregnant. A pregnancy diagnosis (PD) is done by a vet by rectal examination around 45–60 days, or earlier by ultrasound. The table below shows the figures we used.</p>
+  <p class="tcap"><b>Table 2.1</b> Reproductive figures used in the system</p>
+  <table>
+    <tr><th>Event</th><th>Cow</th><th>Buffalo</th><th>How the system uses it</th></tr>
+    <tr><td>Oestrous (heat) cycle</td><td>~21 days</td><td>~21 days</td><td>Reminder to watch for heat 21 days after AI</td></tr>
+    <tr><td>Pregnancy diagnosis</td><td>45–60 days</td><td>45–60 days</td><td>“PD due” alert at 60 days after AI</td></tr>
+    <tr><td>Gestation length</td><td>~283 days</td><td>~310 days</td><td>Expected calving date</td></tr>
+    <tr><td>Dry period</td><td>~60 days</td><td>~60 days</td><td>Dry-off date = expected calving − 60 days</td></tr>
+  </table>
+    <p>After calving, the animal enters a new <em>lactation</em>. The lactation number (first, second, third…) is an important property of a milking animal, and we increase it automatically when a calving is recorded.</p>
+
+  <h2>2.4 Health and medicine</h2>
+  <p>The most common problems on dairy farms in our region are mastitis, foot-and-mouth disease (FMD), haemorrhagic septicaemia (HS), milk fever, retained placenta, diarrhoea in calves and, more recently, lumpy skin disease. Farmers vaccinate against FMD every six months and against HS and black quarter (BQ) once a year, usually before the monsoon, and deworm animals regularly.</p>
+  <p>One important point is the <strong>withdrawal period</strong>. After many antibiotics the milk must not be sold for a few days because of drug residues. If this is forgotten, the dairy can reject the milk. We therefore added a “milk withdrawal until” date to every treatment, and the dashboard warns while it is active.</p>
+
+  <h2>2.5 What a record must contain</h2>
+  <p>From the above, we listed the information that must be stored for each type of record. This list became the starting point for the database tables in Chapter 5.</p>
+  <div class="two-col">
+  <ul>
+    <li><strong>Animal:</strong> tag no., name, species, breed, sex, date of birth, mother, sire or semen, status, lactation no., source and purchase details.</li>
+    <li><strong>Milk:</strong> date, morning litres, evening litres, fat %, SNF %.</li>
+    <li><strong>Health:</strong> date, type, disease, symptoms, medicine, dose, reason, vet, cost, withdrawal date, next due date, outcome.</li>
+    <li><strong>Breeding:</strong> heat date, insemination date, AI or natural, bull / semen straw ID, technician, attempt number, PD date and result, expected calving, dry-off, actual calving, outcome, calf.</li>
+  </ul>
+  </div>
+</section>
+
+<!-- ============ 3 ANALYSIS ============ -->
+<section class="chapter" data-ch="3">
+  <div class="ch-head"><span class="ch-num">3</span><div><small>Chapter Three</small><h1>System Analysis</h1></div></div>
+
+  <h2>3.1 Existing system</h2>
+  <p>In the existing system, the farmer or a worker writes the milk of each animal in a notebook after milking. Insemination dates are written on a calendar or in a diary, and the vet's prescriptions are kept as loose slips. Some farmers use a spreadsheet on a computer, but it is rarely kept up to date because it is not available in the shed and is not designed for this work.</p>
+  <h3>Drawbacks of the existing system</h3>
+  <ul>
+    <li>Time-consuming to search and impossible to analyse.</li>
+    <li>No reminders: pregnancy checks and vaccinations depend on memory.</li>
+    <li>Records of one animal are spread across several registers.</li>
+    <li>No backup and no access from outside the farm.</li>
+  </ul>
+
+  <h2>3.2 Proposed system</h2>
+  <p>The proposed system keeps all the records in one online database that can be opened from a phone or computer after logging in. Each animal has a profile page that brings together its milk, health and breeding history and its calves. Repetitive work is reduced: milk for the whole herd is entered on one screen, breeding dates are calculated automatically, and recording a calving also creates the calf's record.</p>
+  <h3>Advantages</h3>
+  <ul>
+    <li>Complete history of each animal in one place, searchable by tag number or name.</li>
+    <li>Automatic reminders for PD, heat checks, calving, dry-off, vaccines and withdrawal periods.</li>
+    <li>Charts and reports of milk production, with export to CSV for Excel.</li>
+    <li>Secure login; data is backed up by the hosting provider and can also be downloaded.</li>
+  </ul>
+
+  <h2>3.3 Feasibility study</h2>
+  <p><strong>Technical feasibility.</strong> The system uses widely used, well-documented open-source tools (React, PostgreSQL). It runs in any modern browser, so no app has to be installed on the farmer's phone.</p>
+  <p><strong>Economic feasibility.</strong> The hosting services we used (Vercel and Supabase) have free plans that are enough for a single farm. The only cost for the farmer is a phone or computer with internet, which most already have.</p>
+  <p><strong>Operational feasibility.</strong> The screens follow the farmer's daily routine (milking twice a day, vet visits, AI). Labels use familiar terms such as “PD”, “dry-off”, “lactation” and “withdrawal”, and the layout works on small screens.</p>
+</section>
+
+<!-- ============ 4 SRS ============ -->
+<section class="chapter" data-ch="4">
+  <div class="ch-head"><span class="ch-num">4</span><div><small>Chapter Four</small><h1>Requirement Specification</h1></div></div>
+
+  <h2>4.1 Functional requirements</h2>
+  <p class="tcap"><b>Table 4.1</b> Functional requirements</p>
+  <table>
+    <tr><th style="width:12mm">ID</th><th>Requirement</th></tr>
+    <tr><td>FR1</td><td>The user shall be able to sign up, log in, log out and change their password.</td></tr>
+    <tr><td>FR2</td><td>The user shall be able to add, edit, search, filter and delete animals. The tag number must be unique within the account.</td></tr>
+    <tr><td>FR3</td><td>The user shall be able to enter morning and evening milk, fat % and SNF % for all milking animals of a chosen date on one screen.</td></tr>
+    <tr><td>FR4</td><td>Only one milk record shall exist per animal per day; saving again shall update it.</td></tr>
+    <tr><td>FR5</td><td>The user shall be able to record treatments, vaccinations, deworming, check-ups and surgeries for an animal.</td></tr>
+    <tr><td>FR6</td><td>The user shall be able to record heat and insemination. The system shall calculate the heat check, PD, dry-off and expected calving dates based on species.</td></tr>
+    <tr><td>FR7</td><td>The user shall be able to record a calving; the system shall optionally create the calf, link it to its mother and increase the mother's lactation number.</td></tr>
+    <tr><td>FR8</td><td>The dashboard shall show totals, a 14-day milk chart, herd composition, top producers and due reminders.</td></tr>
+    <tr><td>FR9</td><td>The user shall be able to view reports for a date range and export milk and health records as CSV.</td></tr>
+    <tr><td>FR10</td><td>The user shall be able to download a complete backup of their data.</td></tr>
+  </table>
+  
+  <h2>4.2 Non-functional requirements</h2>
+  <ul>
+    <li><strong>Security:</strong> data of one account must never be visible to another account.</li>
+    <li><strong>Usability:</strong> must work on a mobile phone held in one hand in the shed; large touch targets and readable text.</li>
+    <li><strong>Performance:</strong> pages should open in under a second on a normal 4G connection after the first load.</li>
+    <li><strong>Availability:</strong> hosted online and reachable from anywhere.</li>
+    <li><strong>Maintainability:</strong> code divided into small components and pages, with the database schema kept in the repository.</li>
+  </ul>
+
+  <h2>4.3 Hardware and software requirements</h2>
+  <p class="tcap"><b>Table 4.2</b> Hardware and software requirements</p>
+  <table>
+    <tr><th>For the user</th><th>For development</th></tr>
+    <tr><td>Any smartphone, tablet or computer</td><td>Laptop with 8 GB RAM</td></tr>
+    <tr><td>Modern browser (Chrome, Edge, Firefox, Safari)</td><td>Node.js 22, npm, VS Code, Git and GitHub</td></tr>
+    <tr><td>Internet connection</td><td>Supabase account (database and authentication), Vercel account (hosting)</td></tr>
+  </table>
+  </section>
+
+<!-- ============ 5 DESIGN ============ -->
+<section class="chapter" data-ch="5">
+  <div class="ch-head"><span class="ch-num">5</span><div><small>Chapter Five</small><h1>System Design</h1></div></div>
+
+  <h2>5.1 System architecture</h2>
+  <p>The application follows a client–server design. The browser downloads the React application from Vercel's servers once. After that, every read and write goes directly from the browser to Supabase over HTTPS. Supabase checks the user's login token and applies row-level security policies inside PostgreSQL before returning any data.</p>
+  <figure>
+    <svg width="620" height="210" viewBox="0 0 620 210" font-family="Source Serif" font-size="12" fill="#1d2a28">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#1f5f4a"/></marker></defs>
+      <rect x="10" y="60" width="150" height="90" rx="8" fill="#f6f1e6" stroke="#1f5f4a"/>
+      <text x="85" y="88" text-anchor="middle" font-weight="600">User's browser</text>
+      <text x="85" y="108" text-anchor="middle" font-size="10.5">React app (Vite build)</text>
+      <text x="85" y="124" text-anchor="middle" font-size="10.5">phone / laptop</text>
+      <rect x="240" y="10" width="150" height="70" rx="8" fill="#fff" stroke="#1f5f4a"/>
+      <text x="315" y="40" text-anchor="middle" font-weight="600">Vercel</text>
+      <text x="315" y="58" text-anchor="middle" font-size="10.5">static hosting, HTTPS</text>
+      <rect x="240" y="120" width="150" height="80" rx="8" fill="#fff" stroke="#1f5f4a"/>
+      <text x="315" y="146" text-anchor="middle" font-weight="600">Supabase API</text>
+      <text x="315" y="164" text-anchor="middle" font-size="10.5">Auth (login, JWT)</text>
+      <text x="315" y="180" text-anchor="middle" font-size="10.5">REST (PostgREST)</text>
+      <rect x="460" y="120" width="150" height="80" rx="8" fill="#f6f1e6" stroke="#1f5f4a"/>
+      <text x="535" y="146" text-anchor="middle" font-weight="600">PostgreSQL</text>
+      <text x="535" y="164" text-anchor="middle" font-size="10.5">4 tables</text>
+      <text x="535" y="180" text-anchor="middle" font-size="10.5">row-level security</text>
+      <path d="M160 85 L238 50" stroke="#1f5f4a" marker-end="url(#ar)" fill="none"/>
+      <text x="170" y="56" font-size="10" fill="#4b5a57">1. load app</text>
+      <path d="M160 125 L238 155" stroke="#1f5f4a" marker-end="url(#ar)" fill="none"/>
+      <text x="168" y="158" font-size="10" fill="#4b5a57">2. API calls + token</text>
+      <path d="M390 160 L458 160" stroke="#1f5f4a" marker-end="url(#ar)" fill="none"/>
+      <text x="398" y="152" font-size="10" fill="#4b5a57">SQL</text>
+    </svg>
+    <figcaption><b>Fig. 5.1</b> Architecture of the DairyFarm system</figcaption>
+  </figure>
+
+  <h2>5.2 Data flow diagram</h2>
+  <p>Figure 5.2 shows the context level (level 0) data flow. The farmer is the only external entity. The vet and AI technician do not use the system directly; the farmer enters what they did.</p>
+  <figure>
+    <svg width="620" height="230" viewBox="0 0 620 230" font-family="Source Serif" font-size="11" fill="#1d2a28">
+      <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#1f5f4a"/></marker></defs>
+      <rect x="10" y="85" width="110" height="60" fill="#f6f1e6" stroke="#1f5f4a"/>
+      <text x="65" y="112" text-anchor="middle" font-weight="600" font-size="12">Farmer /</text>
+      <text x="65" y="128" text-anchor="middle" font-weight="600" font-size="12">Manager</text>
+      <circle cx="320" cy="115" r="78" fill="#fff" stroke="#1f5f4a"/>
+      <text x="320" y="108" text-anchor="middle" font-weight="600" font-size="13">0</text>
+      <text x="320" y="126" text-anchor="middle" font-weight="600" font-size="12">DairyFarm System</text>
+      <path d="M120 100 C 180 70, 220 70, 246 88" stroke="#1f5f4a" fill="none" marker-end="url(#ar2)"/>
+      <text x="138" y="62" font-size="10">animal details, milk, treatments,</text>
+      <text x="138" y="75" font-size="10">AI &amp; PD results, calving</text>
+      <path d="M246 145 C 220 165, 180 165, 122 132" stroke="#1f5f4a" fill="none" marker-end="url(#ar2)"/>
+      <text x="138" y="182" font-size="10">dashboard, reminders,</text>
+      <text x="138" y="195" font-size="10">animal history, reports, CSV</text>
+      <path d="M470 60 h140 M470 84 h140" stroke="#1f5f4a"/>
+      <text x="480" y="77" font-size="10.5">D1 Animals · D2 Milk</text>
+      <path d="M470 150 h140 M470 174 h140" stroke="#1f5f4a"/>
+      <text x="480" y="167" font-size="10.5">D3 Health · D4 Breeding</text>
+      <path d="M396 95 L 468 74" stroke="#1f5f4a" fill="none" marker-end="url(#ar2)"/>
+      <path d="M468 160 L 396 138" stroke="#1f5f4a" fill="none" marker-end="url(#ar2)"/>
+    </svg>
+    <figcaption><b>Fig. 5.2</b> Level 0 data flow diagram</figcaption>
+  </figure>
+
+  <h2>5.3 Database design</h2>
+  <p>The database has four tables. <code>animals</code> is the central table; the other three refer to it through <code>animal_id</code>. An animal also refers to another animal as its mother (<code>mother_id</code>), and a breeding record refers to the calf that was born (<code>calf_id</code>). Every table has a <code>user_id</code> column which links the row to the account that owns it.</p>
+  <figure>
+    <svg width="640" height="325" viewBox="0 0 640 325" font-family="Source Serif" font-size="10.5" fill="#1d2a28">
+      <g>
+        <rect x="235" y="10" width="170" height="190" fill="#fff" stroke="#1f5f4a"/>
+        <rect x="235" y="10" width="170" height="24" fill="#1f5f4a"/>
+        <text x="320" y="27" text-anchor="middle" fill="#fff" font-weight="600" font-size="12">animals</text>
+        <text x="245" y="50"><tspan font-weight="600">PK</tspan> id</text>
+        <text x="245" y="66"><tspan font-weight="600">FK</tspan> user_id</text>
+        <text x="245" y="82">tag_no (unique per user)</text>
+        <text x="245" y="98">name, species, breed, sex</text>
+        <text x="245" y="114">dob, color, weight_kg</text>
+        <text x="245" y="130"><tspan font-weight="600">FK</tspan> mother_id → animals</text>
+        <text x="245" y="146">sire, source, purchase_*</text>
+        <text x="245" y="162">status, lactation_no</text>
+        <text x="245" y="178">notes, created_at</text>
+      </g>
+      <g>
+        <rect x="10" y="20" width="165" height="130" fill="#fff" stroke="#1f5f4a"/>
+        <rect x="10" y="20" width="165" height="24" fill="#2f7d63"/>
+        <text x="92" y="37" text-anchor="middle" fill="#fff" font-weight="600" font-size="12">milk_records</text>
+        <text x="20" y="60"><tspan font-weight="600">PK</tspan> id</text>
+        <text x="20" y="76"><tspan font-weight="600">FK</tspan> animal_id, user_id</text>
+        <text x="20" y="92">record_date</text>
+        <text x="20" y="108">morning_l, evening_l</text>
+        <text x="20" y="124">fat_pct, snf_pct, notes</text>
+        <text x="20" y="140" font-style="italic" fill="#4b5a57">unique(animal_id, date)</text>
+      </g>
+      <g>
+        <rect x="465" y="20" width="165" height="150" fill="#fff" stroke="#1f5f4a"/>
+        <rect x="465" y="20" width="165" height="24" fill="#2f7d63"/>
+        <text x="547" y="37" text-anchor="middle" fill="#fff" font-weight="600" font-size="12">health_records</text>
+        <text x="475" y="60"><tspan font-weight="600">PK</tspan> id</text>
+        <text x="475" y="76"><tspan font-weight="600">FK</tspan> animal_id, user_id</text>
+        <text x="475" y="92">record_date, record_type</text>
+        <text x="475" y="108">disease, symptoms</text>
+        <text x="475" y="124">medicine, dosage, reason</text>
+        <text x="475" y="140">vet_name, cost, outcome</text>
+        <text x="475" y="156">withdrawal_until, next_due</text>
+      </g>
+      <g>
+        <rect x="150" y="225" width="340" height="92" fill="#fff" stroke="#1f5f4a"/>
+        <rect x="150" y="225" width="340" height="22" fill="#2f7d63"/>
+        <text x="320" y="241" text-anchor="middle" fill="#fff" font-weight="600" font-size="12">breeding_records</text>
+        <text x="160" y="262"><tspan font-weight="600">PK</tspan> id · <tspan font-weight="600">FK</tspan> animal_id, calf_id, user_id</text>
+        <text x="160" y="277">heat_date, insemination_date, method, bull_semen</text>
+        <text x="160" y="292">technician, attempt_no, pd_date, pd_result</text>
+        <text x="160" y="307">expected_calving, dry_off_date, actual_calving, calving_outcome</text>
+      </g>
+      <path d="M175 85 H235" stroke="#1f5f4a"/><text x="180" y="80" font-size="10">N</text><text x="225" y="80" font-size="10">1</text>
+      <path d="M465 95 H405" stroke="#1f5f4a"/><text x="455" y="90" font-size="10">N</text><text x="410" y="90" font-size="10">1</text>
+      <path d="M290 200 V225" stroke="#1f5f4a"/><text x="296" y="216" font-size="10">1 : N</text>
+      <path d="M380 225 V212 H395 V200" stroke="#1f5f4a" fill="none" stroke-dasharray="4 3"/><text x="400" y="216" font-size="10">calf</text>
+      <path d="M235 150 q-30 0 -30 16 q0 16 30 16" stroke="#b4873a" fill="none"/><text x="168" y="200" font-size="10" fill="#b4873a">mother (self)</text>
+    </svg>
+    <figcaption><b>Fig. 5.3</b> Entity–relationship diagram</figcaption>
+  </figure>
+
+  <h3>Data dictionary</h3>
+  <p class="tcap"><b>Table 5.1</b> Important fields of the database</p>
+  <table>
+    <tr><th>Field</th><th>Type</th><th>Description / constraint</th></tr>
+    <tr><td>tag_no</td><td>text</td><td>Ear-tag number, required, unique within an account</td></tr>
+    <tr><td>species</td><td>text</td><td><code>cow</code> or <code>buffalo</code></td></tr>
+    <tr><td>sex</td><td>text</td><td><code>female</code> or <code>male</code></td></tr>
+    <tr><td>status</td><td>text</td><td>lactating, dry, heifer, calf, bull, sold or dead</td></tr>
+    <tr><td>lactation_no</td><td>integer</td><td>Number of calvings; increased automatically on calving</td></tr>
+    <tr><td>mother_id</td><td>uuid</td><td>Refers to another row of <code>animals</code>; set to null if mother is deleted</td></tr>
+    <tr><td>morning_l / evening_l</td><td>numeric(6,2)</td><td>Litres, must be ≥ 0</td></tr>
+    <tr><td>record_type</td><td>text</td><td>treatment, vaccination, deworming, checkup or surgery</td></tr>
+    <tr><td>withdrawal_until</td><td>date</td><td>Milk from the animal should not be sold until this date</td></tr>
+    <tr><td>method</td><td>text</td><td><code>AI</code> or <code>natural</code></td></tr>
+    <tr><td>pd_result</td><td>text</td><td>pending, pregnant, not_pregnant or aborted</td></tr>
+    <tr><td>calf_id</td><td>uuid</td><td>The calf born from this pregnancy (if registered)</td></tr>
+  </table>
+  
+  <h2>5.4 Modules</h2>
+  <p class="tcap"><b>Table 5.2</b> Modules of the system</p>
+  <table>
+    <tr><th>Module</th><th>Purpose</th></tr>
+    <tr><td>Authentication</td><td>Sign up, log in, log out, change password, protected pages</td></tr>
+    <tr><td>Dashboard</td><td>Today's figures, 14-day chart, herd composition, top producers and reminders</td></tr>
+    <tr><td>Animals</td><td>Herd register with search and filters; profile page per animal with tabs for milk, health, breeding and family</td></tr>
+    <tr><td>Milk records</td><td>Day-wise entry grid for the whole herd with running totals</td></tr>
+    <tr><td>Health &amp; medicine</td><td>All treatments and vaccinations, upcoming doses, animals under milk withdrawal</td></tr>
+    <tr><td>Breeding &amp; pregnancy</td><td>Insemination records, pregnancy progress, calving entry and calf registration</td></tr>
+    <tr><td>Reports</td><td>Period-wise production per animal, disease summary, health cost, CSV export</td></tr>
+    <tr><td>Settings</td><td>Account details, password change and full JSON backup</td></tr>
+  </table>
+  
+  <h2>5.5 Interface design</h2>
+  <p>We wanted the application to look modern rather than like an old government form. We combined three visual styles that are popular in current interface design:</p>
+  <ul>
+    <li><strong>Glassmorphism</strong> for panels and the sidebar: semi-transparent white surfaces with a background blur over soft, slowly moving colour blobs.</li>
+    <li><strong>Neumorphism</strong> for inputs, switches and secondary buttons: elements that look pressed into or raised out of the surface using a light and a dark shadow.</li>
+    <li><strong>Claymorphism</strong> for the coloured statistic cards, tags and reminder labels: rounded, slightly “puffy” shapes with inner highlights.</li>
+  </ul>
+  <p>Motion was used with care. Pages fade and rise in with a short stagger, a thin progress bar runs across the top on navigation, numbers count up on the dashboard, charts draw themselves in, and cards lift slightly on hover. A milk-bottle filling animation is shown while the app loads. All animations are switched off if the user's device is set to reduce motion. We chose a green and sky-blue palette to suit the farming theme and kept the font sizes and alignment consistent across all pages.</p>
+</section>
+
+<!-- ============ 6 IMPLEMENTATION ============ -->
+<section class="chapter" data-ch="6">
+  <div class="ch-head"><span class="ch-num">6</span><div><small>Chapter Six</small><h1>Implementation</h1></div></div>
+
+  <h2>6.1 Technology used</h2>
+  <p class="tcap"><b>Table 6.1</b> Technology stack</p>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Why we chose it</th></tr>
+    <tr><td>User interface</td><td>React 18</td><td>Component-based, large community, we had studied it</td></tr>
+    <tr><td>Build tool</td><td>Vite 5</td><td>Very fast development server and small production build</td></tr>
+    <tr><td>Routing</td><td>React Router 6</td><td>Separate URL for every page and every animal</td></tr>
+    <tr><td>Animation</td><td>Framer Motion 11</td><td>Page transitions, shared layout animations, spring effects</td></tr>
+    <tr><td>Styling</td><td>Plain CSS with variables</td><td>Full control over glass, neumorphic and clay effects</td></tr>
+    <tr><td>Database</td><td>PostgreSQL (Supabase)</td><td>Relational data with foreign keys and constraints</td></tr>
+    <tr><td>Authentication</td><td>Supabase Auth</td><td>Email and password login with secure tokens</td></tr>
+    <tr><td>Hosting</td><td>Vercel</td><td>Free HTTPS hosting, deploys straight from GitHub</td></tr>
+    <tr><td>Version control</td><td>Git, GitHub</td><td>Working together on the same code</td></tr>
+  </table>
+  
+  <h2>6.2 Project structure</h2>
+<pre>DiaryFarm/
+├── index.html            entry page and boot loader
+├── vercel.json           sends every URL to index.html (single-page app)
+├── supabase/schema.sql   tables, constraints and security policies
+└── src/
+    ├── App.jsx           routes, page transitions, splash screen
+    ├── lib.js            dates, gestation constants, breeding calculator
+    ├── alerts.js         builds the reminder list
+    ├── data.js           database queries and save/delete helpers
+    ├── components/       Layout, Page, Modal, Forms, Charts, Loader, Toast …
+    └── pages/            Landing, Login, Dashboard, Animals, AnimalDetail,
+                          Milk, Health, Breeding, Reports, Settings</pre>
+
+  <h2>6.3 Calculating breeding dates</h2>
+  <p>When an insemination is entered, the form immediately shows the four dates that follow from it. The calculation depends on the species of the selected animal:</p>
+<pre>export const GESTATION = { cow: 283, buffalo: 310 };
+export const PD_AFTER_DAYS = 60;
+export const HEAT_CYCLE = 21;
+export const DRY_BEFORE_CALVING = 60;
+
+export function breedingPlan(species, inseminationDate) {
+  const gest = GESTATION[species] || GESTATION.cow;
+  const expected = addDays(inseminationDate, gest);
+  return {
+    heatCheck: addDays(inseminationDate, HEAT_CYCLE),
+    pdDue:     addDays(inseminationDate, PD_AFTER_DAYS),
+    expected,
+    dryOff:    addDays(expected, -DRY_BEFORE_CALVING),
+  };
+}</pre>
+  <p>For example, a buffalo inseminated on 10 October 2026 gets a heat check on 31 October 2026, PD due on 9 December 2026, dry-off on 17 June 2027 and expected calving on 16 August 2027.</p>
+  <p>One small problem we ran into was dates shifting by a day. JavaScript converts dates to UTC when formatting them, and since India is 5½ hours ahead of UTC, a date picked late at night could be saved as the previous day. We fixed this by subtracting the time-zone offset before converting the date to text.</p>
+
+  <h2>6.4 Reminders</h2>
+  <p>The function in <code>alerts.js</code> goes through all open breeding records and health records and produces a list of reminders, each with the number of days left (negative if overdue). The rules are:</p>
+  <ul>
+    <li>PD pending and 60 days since AI is within the next week → <em>Pregnancy check due</em>.</li>
+    <li>PD pending and the 21-day mark is within ±3 days → <em>Watch for return of heat</em>.</li>
+    <li>Pregnant and expected calving within 30 days → <em>Calving expected</em>.</li>
+    <li>Pregnant, still milking and dry-off date within a week → <em>Dry-off due</em>.</li>
+    <li>Next dose of a vaccine or medicine within two weeks → <em>Vaccine / dose due</em>.</li>
+    <li>Withdrawal date not yet passed → <em>Don't sell milk</em>.</li>
+  </ul>
+  <p>The dashboard also lists milking animals for which no milk has been entered today.</p>
+
+  <h2>6.5 Saving milk for the whole herd</h2>
+  <p>The milk screen lets the user change many rows and save them together. Only the rows that were changed are sent. Because the table has a unique constraint on <code>(animal_id, record_date)</code>, we use an <em>upsert</em>: a new row is inserted for a new day, and an existing row is updated if the same day is saved again.</p>
+<pre>await supabase.from('milk_records')
+  .upsert(payload, { onConflict: 'animal_id,record_date' });</pre>
+
+  <h2>6.6 Recording a calving</h2>
+  <p>Recording a calving does three things in order: it creates the calf as a new animal (with the mother, sire, species and date of birth filled in), closes the breeding record with the calving date and a link to the calf, and moves the mother to <em>lactating</em> with her lactation number increased by one.</p>
+
+  <h2>6.7 Security</h2>
+  <p>Since the browser talks to the database directly, security cannot depend on the front end. Every table has row-level security (RLS) switched on, with policies that allow a user to read and change only the rows where <code>user_id</code> is their own login id. The <code>user_id</code> column fills itself from the login token, so it cannot be set to someone else's id.</p>
+<pre>alter table public.animals enable row level security;
+create policy "own_select" on public.animals for select
+  to authenticated using ((select auth.uid()) = user_id);
+create policy "own_insert" on public.animals for insert
+  to authenticated with check ((select auth.uid()) = user_id);</pre>
+  <p>The same four policies (select, insert, update, delete) are applied to all four tables. Passwords are never stored by our code; they are handled and hashed by Supabase Auth.</p>
+
+  <h2>6.8 Deployment</h2>
+  <p>The code is stored in a GitHub repository. Vercel is connected to the repository; it runs <code>npm run build</code> and publishes the <code>dist</code> folder. A small <code>vercel.json</code> file makes sure that opening a link like <code>/app/animals/…</code> directly still loads the application. The live site is available at <strong>dairyfarm-manager.vercel.app</strong>.</p>
+  <div class="note">On the free Supabase plan a project is paused after about a week without any activity. If the site does not log in after a long break, the project has to be resumed from the Supabase dashboard. A paid plan or regular use avoids this.</div>
+</section>
+
+<!-- ============ 7 SCREENSHOTS ============ -->
+<section class="chapter" data-ch="7">
+  <div class="ch-head"><span class="ch-num">7</span><div><small>Chapter Seven</small><h1>Screenshots of the Application</h1></div></div>
+  <p>The screenshots below were taken from the running application using a demo account with eleven animals and about six weeks of sample records.</p>
+  <figure><img src="img/landing.jpg"><figcaption><b>Fig. 7.1</b> Home page with animated hero section</figcaption></figure>
+  <figure><img src="img/login.jpg" style="max-width:78%"><figcaption><b>Fig. 7.2</b> Login page</figcaption></figure>
+  <figure><img src="img/dashboard.jpg"><figcaption><b>Fig. 7.3</b> Dashboard with statistics, milk chart and reminders</figcaption></figure>
+  <figure><img src="img/animals.jpg"><figcaption><b>Fig. 7.4</b> Herd register of cows, buffaloes and calves</figcaption></figure>
+  <figure><img src="img/detail-milk.jpg"><figcaption><b>Fig. 7.5</b> Profile of an animal with its milk history</figcaption></figure>
+  <figure><img src="img/detail-health.jpg"><figcaption><b>Fig. 7.6</b> Health and medicine history of an animal</figcaption></figure>
+  <figure><img src="img/milk.jpg"><figcaption><b>Fig. 7.7</b> Daily milk entry for the whole herd</figcaption></figure>
+  <figure><img src="img/health.jpg"><figcaption><b>Fig. 7.8</b> Health records with upcoming doses and withdrawal list</figcaption></figure>
+  <figure><img src="img/breeding.jpg"><figcaption><b>Fig. 7.9</b> Breeding and pregnancy tracking</figcaption></figure>
+  <figure><img src="img/insemination.jpg"><figcaption><b>Fig. 7.10</b> Adding an insemination; the dates are calculated as soon as an animal is chosen</figcaption></figure>
+  <figure><img src="img/reports.jpg"><figcaption><b>Fig. 7.11</b> Reports for a chosen period with CSV export</figcaption></figure>
+  <div class="fig-pair">
+    <figure><img src="img/settings.jpg"><figcaption><b>Fig. 7.12</b> Settings and backup</figcaption></figure>
+    <figure><img src="img/mobile.jpg"><figcaption><b>Fig. 7.13</b> Dashboard on a mobile phone</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 8 TESTING ============ -->
+<section class="chapter" data-ch="8">
+  <div class="ch-head"><span class="ch-num">8</span><div><small>Chapter Eight</small><h1>Testing</h1></div></div>
+  <p>We tested each module by hand as it was completed. We also opened every page at desktop and mobile sizes in an automated browser to check that the layout did not break and that no errors appeared in the browser console. The main test cases are listed below.</p>
+  <p class="tcap"><b>Table 8.1</b> Test cases and results</p>
+  <table>
+    <tr><th style="width:10mm">#</th><th>Test case</th><th>Expected result</th><th style="width:14mm">Result</th></tr>
+    <tr><td>1</td><td>Log in with a correct email and password</td><td>Dashboard opens</td><td class="ok">Pass</td></tr>
+    <tr><td>2</td><td>Log in with a wrong password</td><td>Error message shown, stays on login page</td><td class="ok">Pass</td></tr>
+    <tr><td>3</td><td>Open <code>/app</code> without logging in</td><td>Redirected to login page</td><td class="ok">Pass</td></tr>
+    <tr><td>4</td><td>Add an animal with a tag number that already exists</td><td>“A record with the same key already exists” message</td><td class="ok">Pass</td></tr>
+    <tr><td>5</td><td>Search animals by part of a name or tag</td><td>Only matching animals shown</td><td class="ok">Pass</td></tr>
+    <tr><td>6</td><td>Enter milk for 5 animals and save</td><td>Day total updated; 5 rows saved</td><td class="ok">Pass</td></tr>
+    <tr><td>7</td><td>Change one animal's milk for the same day and save again</td><td>Existing row updated, no duplicate</td><td class="ok">Pass</td></tr>
+    <tr><td>8</td><td>Enter a negative milk quantity</td><td>Rejected by the input and the database</td><td class="ok">Pass</td></tr>
+    <tr><td>9</td><td>Add AI for a buffalo on 10 Oct 2026</td><td>Expected calving 16 Aug 2027, dry-off 17 Jun 2027</td><td class="ok">Pass</td></tr>
+    <tr><td>10</td><td>Add AI for a cow on the same date</td><td>Expected calving 20 Jul 2027 (283 days)</td><td class="ok">Pass</td></tr>
+    <tr><td>11</td><td>AI recorded 55 days ago with PD pending</td><td>“Pregnancy check due in 5 d” on dashboard</td><td class="ok">Pass</td></tr>
+    <tr><td>12</td><td>Record a calving with calf details</td><td>Calf created with mother linked; mother becomes lactating, lactation +1</td><td class="ok">Pass</td></tr>
+    <tr><td>13</td><td>Add treatment with withdrawal date 4 days ahead</td><td>Animal listed under “don't sell milk”</td><td class="ok">Pass</td></tr>
+    <tr><td>14</td><td>Export milk report as CSV and open in Excel</td><td>Columns and values correct</td><td class="ok">Pass</td></tr>
+    <tr><td>15</td><td>Log in as a second account</td><td>None of the first account's animals visible</td><td class="ok">Pass</td></tr>
+    <tr><td>16</td><td>Open every page on a 390 px wide phone screen</td><td>No horizontal scrolling; tables shown as cards</td><td class="ok">Pass</td></tr>
+    <tr><td>17</td><td>Delete an animal that has records</td><td>Animal and all its milk, health and breeding records removed</td><td class="ok">Pass</td></tr>
+  </table>
+  
+  <h3>Problems found during testing</h3>
+  <ul>
+    <li>Our first page transition covered the whole screen with a coloured curtain on every click. It looked good once but made the app feel slow in daily use, so we replaced it with a quicker fade-and-rise transition and a thin progress bar.</li>
+    <li>Chart labels were stretched on wide screens because the chart was scaled without keeping its proportions. We fixed the scaling and moved the axis labels.</li>
+    <li>On the home page one floating card covered the text of the sample milk card; we repositioned the cards.</li>
+  </ul>
+</section>
+
+<!-- ============ 9 FUTURE ============ -->
+<section class="chapter" data-ch="9">
+  <div class="ch-head"><span class="ch-num">9</span><div><small>Chapter Nine</small><h1>Limitations and Future Scope</h1></div></div>
+  <h2>9.1 Limitations</h2>
+  <ul>
+    <li>An internet connection is needed; the app does not yet work offline in the shed.</li>
+    <li>Only one login per farm. Workers cannot be given separate accounts with limited rights.</li>
+    <li>The interface is in English only.</li>
+    <li>Milk sales, payments from the dairy, feed and other expenses are not recorded.</li>
+    <li>On the free hosting plan the database pauses after a period without use.</li>
+  </ul>
+  <h2>9.2 Future scope</h2>
+  <ul>
+    <li><strong>Punjabi and Hindi language</strong> options so that farm workers can use it comfortably.</li>
+    <li><strong>Offline mode</strong> that saves entries on the phone and uploads them when the network is available.</li>
+    <li><strong>Multiple users</strong> per farm with roles (owner, manager, worker, vet).</li>
+    <li><strong>Accounts module</strong> for milk sold to the dairy or customers, payments, feed purchase and profit per animal.</li>
+    <li><strong>SMS or WhatsApp reminders</strong> for PD, vaccination and calving dates.</li>
+    <li>Scanning the ear tag with the phone camera to open an animal's record.</li>
+    <li>Linking with the government's Bharat Pashudhan (INAPH) records using the 12-digit tag.</li>
+  </ul>
+</section>
+
+<!-- ============ 10 CONCLUSION ============ -->
+<section class="chapter" data-ch="10">
+  <div class="ch-head"><span class="ch-num">10</span><div><small>Chapter Ten</small><h1>Conclusion</h1></div></div>
+  <p>In this project we developed DairyFarm, a web application that lets a dairy farmer keep complete records of every cow and buffalo on the farm. It brings together the animal register, daily morning and evening milk, health and medicine history, and the full breeding cycle from heat to calving in one place, and it reminds the farmer of what needs to be done next.</p>
+  <p>The project gave us practical experience of the whole process of building software: studying a real problem and its users' needs, designing a relational database, building a React front end, securing data with row-level security and deploying the application online. We also learned that small details matter a lot to users, such as calculating dates correctly for buffaloes and cows, or warning about milk withdrawal after medicine.</p>
+  <p>We believe a tool like this can help small farms reduce losses from missed pregnancy checks and late treatment, and make better decisions about which animals to keep. With the improvements listed in Chapter 9, especially regional languages and offline use, it could be used on many more farms.</p>
+</section>
+
+<!-- ============ REFERENCES ============ -->
+<section class="chapter" data-ch="11">
+  <div class="ch-head"><span class="ch-num" style="font-size:30pt">§</span><div><small>Bibliography</small><h1>References</h1></div></div>
+  <ol class="refs">
+    <li>National Dairy Development Board (NDDB). Animal breeding, health and productivity enhancement resources. https://www.nddb.coop</li>
+    <li>Department of Animal Husbandry and Dairying, Government of India. Bharat Pashudhan / INAPH animal identification. https://dahd.gov.in</li>
+    <li>ICAR – Central Institute for Research on Buffaloes, Hisar. Buffalo breeding and management practices. https://cirb.res.in</li>
+    <li>Guru Angad Dev Veterinary and Animal Sciences University (GADVASU), Ludhiana. Package of practices for dairy farming.</li>
+    <li>React documentation. https://react.dev</li>
+    <li>Vite documentation. https://vitejs.dev</li>
+    <li>React Router documentation. https://reactrouter.com</li>
+    <li>Motion (Framer Motion) documentation. https://motion.dev</li>
+    <li>Supabase documentation: Auth, Database and Row Level Security. https://supabase.com/docs</li>
+    <li>PostgreSQL 17 documentation. https://www.postgresql.org/docs/</li>
+    <li>Vercel documentation. https://vercel.com/docs</li>
+    <li>MDN Web Docs: CSS backdrop-filter and box-shadow. https://developer.mozilla.org</li>
+  </ol>
+</section>
+
+</body>
+</html>
